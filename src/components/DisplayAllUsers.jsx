@@ -19,7 +19,7 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
-import DisplayOneUser from "./DisplayOneUser";
+
 import DeleteOneUser from "./DeleteOneUser";
 import AddOneStudent from "./AddStudent";
 import DisplayUser from "./DisplayUser";
