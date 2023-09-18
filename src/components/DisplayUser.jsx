@@ -23,12 +23,31 @@ export default function DisplayUser({ open, handleClose, student }) {
       address: address,
     };
 
-    const updateStudent = async () => {
-      await axios.put(
-        `http://localhost:8080/api/students/${student.studentId}`,
-        newValue
-      );
-    };
+    let isFull = false;
+
+    if (name === "" || age === 0 || address === "") {
+      isFull = false;
+    } else {
+      isFull = true;
+    }
+
+    let updateStudent = null;
+
+    if (isFull === true) {
+      updateStudent = async () => {
+        await axios.put(
+          `http://localhost:8080/api/students/${student.studentId}`,
+          newValue
+        );
+      };
+    } else {
+      updateStudent = async () => {
+        await axios.patch(
+          `http://localhost:8080/api/students/${student.studentId}`,
+          newValue
+        );
+      };
+    }
 
     return (
       <Dialog
@@ -80,6 +99,7 @@ export default function DisplayUser({ open, handleClose, student }) {
           </Button>
           <Button
             onClick={() => {
+              console.log(isFull);
               updateStudent();
               handleClose();
             }}
