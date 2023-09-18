@@ -98,7 +98,7 @@ const DisplayAllUsers = () => {
                 <TableCell align="center">{student.age}</TableCell>
                 <TableCell align="center">{student.address}</TableCell>
                 <TableCell align="center">
-                  <IconButton aria-label="View" color="success" title="Suspend">
+                  <IconButton aria-label="View" color="success" title="View">
                     <VisibilityIcon
                       onClick={() => {
                         setSelectedStudent(student);
@@ -107,7 +107,7 @@ const DisplayAllUsers = () => {
                     />
                   </IconButton>
 
-                  <IconButton aria-label="Delete" color="error" title="Suspend">
+                  <IconButton aria-label="Delete" color="error" title="Delete">
                     <DeleteIcon
                       onClick={() => {
                         setSelectedStudent(student);
