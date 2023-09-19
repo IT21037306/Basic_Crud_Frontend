@@ -95,7 +95,6 @@ const DisplayAllUsers = () => {
                 <TableCell align="center">{student.age}</TableCell>
                 <TableCell align="center">{student.address}</TableCell>
                 <TableCell align="center">
-
                   <IconButton
                     aria-label="View"
                     color="success"
@@ -118,7 +117,6 @@ const DisplayAllUsers = () => {
                     }}
                   >
                     <DeleteIcon />
-
                   </IconButton>
 
                   <DeleteOneUser open={open1} handleClose={handleClose1} />
