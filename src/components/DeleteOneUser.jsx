@@ -6,14 +6,44 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { deleteSelectedStudent, deleteStudent } from "../features/StudentSlice";
+import { useState } from "react";
+import { useEffect } from "react";
 
-export default function DeleteOneUser({ open, handleClose, student }) {
+export default function DeleteOneUser({ open, handleClose }) {
   const dispatch = useDispatch();
 
-  const deleteStudent = async (id) => {
-    await axios.delete(`http://localhost:8080/api/students/${id}`);
+  const [name, setName] = useState("");
+
+  const { selectedStudent } = useSelector((state) => state.students);
+
+  if (selectedStudent === null) {
+    return (
+      <>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={true}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </>
+    );
+  }
+
+  useEffect(() => {
+    if (Object.keys(selectedStudent).length > 0) {
+      setName(selectedStudent.name);
+    }
+  }, [selectedStudent]);
+
+  const deleteStudentFunc = (id) => {
+    dispatch(deleteStudent(id))
+      .unwrap()
+      .then(() => {
+        dispatch(deleteSelectedStudent(id));
+      });
   };
 
   return (
@@ -25,7 +55,7 @@ export default function DeleteOneUser({ open, handleClose, student }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Are you sure want to Remove Post?"}
+          {`Are you sure want to Remove ${name}?`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -38,7 +68,7 @@ export default function DeleteOneUser({ open, handleClose, student }) {
           </Button>
           <Button
             onClick={() => {
-              deleteStudent(student.studentId);
+              deleteStudentFunc(selectedStudent.studentId);
               handleClose();
             }}
             autoFocus

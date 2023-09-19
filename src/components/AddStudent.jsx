@@ -10,9 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useState } from "react";
+import { addAStudent } from "../features/StudentSlice";
 
 export default function AddOneStudent({ open, handleClose }) {
-  const navigate = useNavigate;
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [age, setAge] = useState(0);
@@ -24,9 +25,13 @@ export default function AddOneStudent({ open, handleClose }) {
     address: address,
   };
 
-  const addStudent = async () => {
-    await axios.post(`http://localhost:8080/api/students`, student);
+  const addStudent = () => {
+    dispatch(addAStudent({ name: name, age: age, address: address }));
   };
+
+  // const addStudent = async () => {
+  //   await axios.post(`http://localhost:8080/api/students`, student);
+  // };
 
   return (
     <div>

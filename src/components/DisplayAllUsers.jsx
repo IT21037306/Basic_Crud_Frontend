@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
@@ -23,6 +23,8 @@ import axios from "axios";
 import DeleteOneUser from "./DeleteOneUser";
 import AddOneStudent from "./AddStudent";
 import DisplayUser from "./DisplayUser";
+import { getAllStudents, getSelectedStudent } from "../features/StudentSlice";
+import StudentService from "../features/StudentService";
 
 const DisplayAllUsers = () => {
   const dispatch = useDispatch();
@@ -43,21 +45,16 @@ const DisplayAllUsers = () => {
   const handleOpen3 = () => setOpen3(true);
   const handleClose3 = () => setOpen3(false);
 
-  const [students, setStudents] = useState([]);
-
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [stID, setStID] = useState(0);
 
   useEffect(() => {
-    loadAllStudents();
+    dispatch(getAllStudents());
   }, []);
 
-  const loadAllStudents = async () => {
-    const result = await axios.get("http://localhost:8080/api/students");
-    setStudents(result.data);
-  };
+  const { allStudents, isLoading } = useSelector((state) => state.students);
 
-  if (students.length === 0) {
+  if (isLoading) {
     return (
       <>
         <Backdrop
@@ -92,41 +89,39 @@ const DisplayAllUsers = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students.map((student, index) => (
+            {allStudents.map((student, index) => (
               <TableRow key={index + 1}>
                 <TableCell align="center">{student.name}</TableCell>
                 <TableCell align="center">{student.age}</TableCell>
                 <TableCell align="center">{student.address}</TableCell>
                 <TableCell align="center">
-                  <IconButton aria-label="View" color="success" title="Suspend">
-                    <VisibilityIcon
-                      onClick={() => {
-                        setSelectedStudent(student);
-                        handleOpen3();
-                      }}
-                    />
+                  <IconButton
+                    aria-label="View"
+                    color="success"
+                    title="Suspend"
+                    onClick={() => {
+                      handleOpen3();
+                      dispatch(getSelectedStudent(student));
+                    }}
+                  >
+                    <VisibilityIcon />
                   </IconButton>
 
-                  <IconButton aria-label="Delete" color="error" title="Suspend">
-                    <DeleteIcon
-                      onClick={() => {
-                        setSelectedStudent(student);
-                        handleOpen1();
-                      }}
-                    />
+                  <IconButton
+                    aria-label="Delete"
+                    color="error"
+                    title="Suspend"
+                    onClick={() => {
+                      handleOpen1();
+                      dispatch(getSelectedStudent(student));
+                    }}
+                  >
+                    <DeleteIcon />
                   </IconButton>
 
-                  <DeleteOneUser
-                    open={open1}
-                    handleClose={handleClose1}
-                    student={selectedStudent}
-                  />
+                  <DeleteOneUser open={open1} handleClose={handleClose1} />
 
-                  <DisplayUser
-                    handleClose={handleClose3}
-                    open={open3}
-                    student={selectedStudent}
-                  />
+                  <DisplayUser handleClose={handleClose3} open={open3} />
 
                   <AddOneStudent open={open2} handleClose={handleClose2} />
                 </TableCell>
