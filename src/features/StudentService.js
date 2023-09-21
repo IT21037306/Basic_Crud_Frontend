@@ -1,8 +1,10 @@
 import axios from "axios";
-const API_URL = "http://localhost:8080/api/students";
+const API_URL = "http://localhost:8082/api/students";
 
-const getAllStudents = async () => {
-  const response = await axios.get(API_URL);
+const getAllStudents = async (getObj) => {
+  const response = await axios.get(
+    API_URL + "?page=" + getObj.page + "&limit=" + getObj.limit
+  );
   return response.data;
 };
 

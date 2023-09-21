@@ -49,7 +49,7 @@ const DisplayAllUsers = () => {
   const [stID, setStID] = useState(0);
 
   useEffect(() => {
-    dispatch(getAllStudents());
+    dispatch(getAllStudents({ page: 0, limit: 10 }));
   }, []);
 
   const { allStudents, isLoading } = useSelector((state) => state.students);

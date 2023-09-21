@@ -13,9 +13,9 @@ const initialState = {
 
 export const getAllStudents = createAsyncThunk(
   "students/getAllStudents",
-  async (_, thunkAPI) => {
+  async (getObj, thunkAPI) => {
     try {
-      return await StudentService.getAllStudents();
+      return await StudentService.getAllStudents(getObj);
     } catch (error) {
       const message =
         (error.response &&
@@ -33,7 +33,6 @@ export const addAStudent = createAsyncThunk(
   "students/addAStudent",
   async (student, thunkAPI) => {
     try {
-      console.log(student);
       return await StudentService.addAStudent({
         name: student.name,
         age: student.age,
@@ -109,11 +108,12 @@ const studentSlice = createSlice({
       .addCase(getAllStudents.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.allStudents = action.payload;
+        state.allStudents = action.payload.content;
       })
       .addCase(getAllStudents.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+
         state.message = action.payload;
       })
       .addCase(addAStudent.pending, (state) => {
